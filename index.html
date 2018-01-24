@@ -180,7 +180,36 @@
     <p class="setup-similar-label">Петр Петров</p>
   </div>
 </template>
+<script>
+// Объявляем переменные
+var fireballSize = 22;
+var wizardSpeed = 3;
+var wizardWidth = 70;
+var fireballSpeedLeft = 5;
+var fireballSpeedRight = 2;
+var heightCoefficient = 1.337;
+var wizardWidthHalf = wizardWidth/2;
 
+// Функция для управления скоростью файрболла
+function getFireballSpeed(left) {
+return left ? fireballSpeedLeft : fireballSpeedRight;
+};
+
+// Функция для рассчета высоты мага
+function getWizardHeight(wizardWidth) {
+return getWizardHeight = heightCoefficient * wizardWidth;
+};
+
+// Функция для определения начального положения мага на стартовом экране по оси Х
+function getWizardX(width) {
+return getWizardX = width/2 - wizardWidthHalf;
+};
+
+// Функция для определения начального положения мага на стартовом экране по оси Х
+function getWizardY(height) {
+return getWizardY = height/3 - getWizardHeight;
+};
+</script>
 <script src="js/game.js"></script>
 
 </body>
