@@ -16,10 +16,15 @@
   function getMaxElementFromArr(arr) {
     return getSortArr(arr)[([arr.length - 1])];
   }
+  // Функция находит для нахождения случайный элемент в массиве
+  function getRandomValueFromArr(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
 
   window.util = {
     getRandomValue: getRandomValue,
     getMaxElementFromArr: getMaxElementFromArr,
     getSortArr: getSortArr,
+    getRandomValueFromArr: getRandomValueFromArr
   };
 })();
