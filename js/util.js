@@ -17,9 +17,14 @@
     return getSortArr(arr)[([arr.length - 1])];
   }
 
+  function getRandomValueFromArr(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
   window.util = {
     getRandomValue: getRandomValue,
     getMaxElementFromArr: getMaxElementFromArr,
     getSortArr: getSortArr,
+    getRandomValueFromArr: getRandomValueFromArr
   };
 })();
