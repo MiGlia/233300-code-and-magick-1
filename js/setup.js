@@ -8,7 +8,6 @@
   var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
   var wizardCount = 4;
   var userDialog = document.querySelector('.setup');
-  var fragment = document.createDocumentFragment();
 
   // пустой массив для будущих волшебников)))
   var wizards = [];
@@ -37,6 +36,8 @@
   // нахрдим элемент в который будем всавлять похожих магов и шаблон
   var similarListElement = document.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
+  // Фрагмент для группировки
+  var fragment = document.createDocumentFragment();
 
   // Функция для клонирования шаблона и заполнения его новыми данными
   function renderWizard(arr) {
