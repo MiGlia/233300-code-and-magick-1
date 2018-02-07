@@ -63,7 +63,7 @@
   <div class="demo"></div>
 
   <div class="setup-open">
-    <img src="./img/user-1.jpg" class="setup-open-icon">
+    <img src="./img/user-1.jpg" class="setup-open-icon" tabindex="0">
   </div>
 </header>
 
@@ -71,7 +71,8 @@
   <form class="setup-wizard-form"
         method="post"
         enctype="multipart/form-data"
-        autocomplete="off">
+        autocomplete="off"
+        action="https://js.dump.academy/code-and-magick">
 
     <div class="setup-title">
       <div class="setup-user">
@@ -82,11 +83,11 @@
         <label>
           <input type="text" name="username"
                  maxlength="25" required
-                 class="setup-user-name" value="Синий Пендальф"/>
+                 class="setup-user-name" minlength ="2" value="Синий Пендальф"/>
         </label>
       </div>
 
-      <span class="setup-close">&times;</span>
+      <span class="setup-close" tabindex="0">&times;</span>
     </div>
 
 
@@ -214,6 +215,6 @@ return getWizardY = height/3 - getWizardHeight;
 <script src="js/stat.js"></script>
 <script src="js/setup.js"></script>
 <script src="js/game.js"></script>
-
+<script src="js/userdialog.js"></script>
 </body>
 </html>
