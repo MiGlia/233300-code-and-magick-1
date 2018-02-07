@@ -30,7 +30,7 @@
   createWizardArr(wizardCount, wizards);
 
   // Делаем видимым диалоговое окно и окно с похожими персонажами
-  userDialog.classList.remove('hidden');
+  // userDialog.classList.remove('hidden');
   userDialog.querySelector('.setup-similar').classList.remove('hidden');
 
   // нахрдим элемент в который будем всавлять похожих магов и шаблон
@@ -57,4 +57,10 @@
     }
   }
   drawWizards(wizards);
+
+  window.setup = {
+    WIZARD_COAT_COLORS: WIZARD_COAT_COLORS,
+    WIZARD_EYES_COLORS: WIZARD_EYES_COLORS,
+    userDialog: userDialog
+  };
 })();
