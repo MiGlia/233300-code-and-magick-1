@@ -91,24 +91,28 @@
     changeFireballColor(wizardFireballColor, window.setup.WIZARD_FIREBALL_COLORS);
   });
 
+  //  Объявляем переменные константы
   var dialogHandle = window.setup.userDialog.querySelector('.setup-user-pic');
 
   dialogHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
+    // Начальные координаты
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
     };
 
-    var onMouseMove = function (moveEvt) {
+    // Функция расчета координат при передвижениее окна
+    function onMouseMove(moveEvt) {
       moveEvt.preventDefault();
 
+      // Смещение
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
-
+      // новые начальные координаты
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
@@ -116,18 +120,64 @@
 
       window.setup.userDialog.style.top = (window.setup.userDialog.offsetTop - shift.y) + 'px';
       window.setup.userDialog.style.left = (window.setup.userDialog.offsetLeft - shift.x) + 'px';
-    };
+    }
 
-    var onMouseUp = function (upEvt) {
+    // При опускании кнопки мыши удаляем обработчики нажатия и перемещения мыши
+    function onMouseUp(upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    };
+    }
 
+    // Навешиваем обработчики событий
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  var shopElement = document.querySelector('.setup-artifacts-shop');
+  var draggedItem = null;
 
+  // Обработчик на элементе от куда перемещается элементе
+  // Если уже IMG, то
+  shopElement.addEventListener('dragstart', function (evt) {
+    var target = evt.target;
+    if (target.tagName === 'IMG') {
+      draggedItem = target;
+      evt.dataTransfer.setData('text/plain', target.alt);
+    }
+    artifactsElement.style.outline = '2px dashed red';
+  });
+
+  var artifactsElement = document.querySelector('.setup-artifacts');
+
+  artifactsElement.addEventListener('dragover', function (evt) {
+    artifactsElement.style.outline = '';
+    evt.preventDefault();
+    return false;
+  });
+
+  // Обработчик на элементе куда перемещается элементе
+  // Если еще не содержит этот элемент, то клонируем
+  artifactsElement.addEventListener('drop', function (evt) {
+    var target = evt.target;
+    if (target.alt !== 'Star') {
+      target.appendChild(draggedItem.cloneNode(true));
+    }
+    artifactsElement.style.outline = '';
+    target.style.backgroundColor = '';
+    evt.preventDefault();
+  });
+
+  artifactsElement.addEventListener('dragenter', function (evt) {
+    var target = evt.target;
+    target.style.backgroundColor = 'yellow';
+    evt.preventDefault();
+  });
+
+  artifactsElement.addEventListener('dragleave', function (evt) {
+    var target = evt.target;
+    target.style.backgroundColor = '';
+    evt.preventDefault();
+  });
 })();
