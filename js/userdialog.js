@@ -3,9 +3,13 @@
   //  Объявляем переменные константы
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+  var WIZARD_FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
   var setup = document.querySelector('.setup-open');
-  var setupClose = window.setup.userDialog.querySelector('.setup-close');
-  var inputSetupUserName = window.setup.userDialog.querySelector('.setup-user-name');
+  var userDialog = document.querySelector('.setup');
+  var setupClose = userDialog.querySelector('.setup-close');
+  var inputSetupUserName = userDialog.querySelector('.setup-user-name');
 
   // Функция для валидации поля вввода имент персонажа
   function invalidInputSetup() {
@@ -23,17 +27,17 @@
   // Функция для открытия попапа
   // Удаляем класс hidden и добавляем обработчик событий который закрывает попап по нажатию на Esc
   function popupOpen() {
-    window.setup.userDialog.classList.remove('hidden');
+    userDialog.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
   }
 
   // Функция для закрытия попапа
   // Добавляем класс hidden и удаляем обработчик событий который закрывает попап по нажатию на Esc
   function popupClose() {
-    window.setup.userDialog.classList.add('hidden');
+    userDialog.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
-    window.setup.userDialog.style.top = '80px';
-    window.setup.userDialog.style.left = '470px';
+    userDialog.style.top = '80px';
+    userDialog.style.left = '470px';
   }
 
   // Функция для закрытия попапа с клавиши Esc
@@ -64,9 +68,9 @@
   inputSetupUserName.addEventListener('invalid', invalidInputSetup);
 
   // Объявляем переменные - которыке отвечают за цвета плащей, глаз и файрболла магов
-  var wizardCoatColor = window.setup.userDialog.querySelector('.setup-wizard .wizard-coat');
-  var wizardEyesColor = window.setup.userDialog.querySelector('.setup-wizard .wizard-eyes');
-  var wizardFireballColor = window.setup.userDialog.querySelector('.setup-fireball-wrap');
+  var wizardCoatColor = userDialog.querySelector('.setup-wizard .wizard-coat');
+  var wizardEyesColor = userDialog.querySelector('.setup-wizard .wizard-eyes');
+  var wizardFireballColor = userDialog.querySelector('.setup-fireball-wrap');
 
   // Функция для случайного изменения цыета
   function changeColor(elemOfColorChange, arr) {
@@ -80,19 +84,19 @@
 
   // Навешиваем обработчики событий
   wizardCoatColor.addEventListener('click', function () {
-    changeColor(wizardCoatColor, window.setup.WIZARD_COAT_COLORS);
+    changeColor(wizardCoatColor, WIZARD_COAT_COLORS);
   });
 
   wizardEyesColor.addEventListener('click', function () {
-    changeColor(wizardEyesColor, window.setup.WIZARD_EYES_COLORS);
+    changeColor(wizardEyesColor, WIZARD_EYES_COLORS);
   });
 
   wizardFireballColor.addEventListener('click', function () {
-    changeFireballColor(wizardFireballColor, window.setup.WIZARD_FIREBALL_COLORS);
+    changeFireballColor(wizardFireballColor, WIZARD_FIREBALL_COLORS);
   });
 
   //  Объявляем переменные константы
-  var dialogHandle = window.setup.userDialog.querySelector('.setup-user-pic');
+  var dialogHandle = userDialog.querySelector('.setup-user-pic');
 
   dialogHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -180,4 +184,48 @@
     target.style.backgroundColor = '';
     evt.preventDefault();
   });
+
+  function formReset() {
+    inputSetupUserName.value = 'Синий Пендальф';
+    userDialog.classList.add('hidden');
+  }
+
+  var formDialog = userDialog.querySelector('.setup-wizard-form');
+
+  formDialog.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(formDialog), formReset, window.backend.errorHandler);
+    evt.preventDefault();
+  });
+
+  // нахрдим элемент в который будем всавлять похожих магов и шаблон
+  var similarListElement = document.querySelector('.setup-similar-list');
+  var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
+
+  // Функция для клонирования шаблона и заполнения его новыми данными
+  function renderWizard(wizards) {
+    var wizardElement = similarWizardTemplate.cloneNode(true);
+
+    wizardElement.querySelector('.setup-similar-label').textContent = wizards.name;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizards.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizards.colorEyes;
+    return wizardElement;
+  }
+
+  // Фунцция для добавления волшебников во фрагмент и
+  // добавления фрагмента в блок похожих волшебников
+  // показа блока с похржими волшебниками
+  function successHandler(wizards) {
+    // Фрагмент для группировки
+    var wizardsCount = 4;
+    var newWizards = wizards.sort(window.util.compareRandom);
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < wizardsCount; i++) {
+      fragment.appendChild(renderWizard(newWizards[i]));
+      similarListElement.appendChild(fragment);
+      userDialog.querySelector('.setup-similar').classList.remove('hidden');
+    }
+  }
+
+  // Загрузка данных с сервера
+  window.backend.load(successHandler, window.backend.errorHandler);
 })();

@@ -21,10 +21,21 @@
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
+  function compareRandom(a, b) {
+    if (a > b) {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+    return Math.random() - 0.5;
+  }
+
   window.util = {
     getRandomValue: getRandomValue,
     getMaxElementFromArr: getMaxElementFromArr,
     getSortArr: getSortArr,
-    getRandomValueFromArr: getRandomValueFromArr
+    getRandomValueFromArr: getRandomValueFromArr,
+    compareRandom: compareRandom
   };
 })();
